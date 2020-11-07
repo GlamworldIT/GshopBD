@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "1021590611937",
+    "firebase_url": "https://glam-shop-83436.firebaseio.com",
+    "project_id": "glam-shop-83436",
+    "storage_bucket": "glam-shop-83436.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021590611937:android:66fb54563cae54a23dd4a0",
+        "android_client_info": {
+          "package_name": "com.glamworlditltd.admin_panel_gs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021590611937-o4t38h19dsuvsqqe133u0mvgnodj1bh8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.glamworlditltd.admin_panel_gs",
+            "certificate_hash": "064b34ddbe7b6403a2f617bff9c8365c23cc57e0"
+          }
+        },
+        {
+          "client_id": "1021590611937-jk96hgf7ak89d71sm8l2nhqee3engeui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuaPdyp5J8uY9wnYSdQslzypDFd905vJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021590611937-jk96hgf7ak89d71sm8l2nhqee3engeui.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1021590611937-ifp68qr0urit0di8ipea7okvdcrcsdtq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.glamshop"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021590611937:android:f05c8065ab3673f73dd4a0",
+        "android_client_info": {
+          "package_name": "com.glamworlditltd.gshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021590611937-vrp0ip2e7qd1ig1udq9gd2htf9ro664u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.glamworlditltd.gshop",
+            "certificate_hash": "064b34ddbe7b6403a2f617bff9c8365c23cc57e0"
+          }
+        },
+        {
+          "client_id": "1021590611937-jk96hgf7ak89d71sm8l2nhqee3engeui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuaPdyp5J8uY9wnYSdQslzypDFd905vJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021590611937-jk96hgf7ak89d71sm8l2nhqee3engeui.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1021590611937-ifp68qr0urit0di8ipea7okvdcrcsdtq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.glamshop"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
