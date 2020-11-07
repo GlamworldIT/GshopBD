@@ -273,6 +273,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Update Account...
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(
@@ -304,6 +305,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Search Product....
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(
@@ -332,6 +334,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Cart List....
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(
@@ -361,6 +364,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Order List....
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(
@@ -389,6 +393,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Get Reward Point...
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(
@@ -417,6 +422,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Contact with us...
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () {
                   Navigator.push(context,
@@ -441,6 +447,7 @@ class NavigationDrawer extends StatelessWidget {
 
             ///Logout....
             Card(
+              elevation: 0,
               child: ListTile(
                 onTap: () async{
                   SharedPreferences preferences = await SharedPreferences.getInstance();
