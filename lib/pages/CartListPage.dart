@@ -79,6 +79,7 @@ class _CartListState extends State<CartList> {
   }
 
   Widget cartListBuilder(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     fetchCartList();
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -86,7 +87,7 @@ class _CartListState extends State<CartList> {
           itemCount: cartsList.length,
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.only(bottom: 20, top: 10),
+              margin: EdgeInsets.only(bottom: 10, top: 10),
               child: Column(
                 children: [
 
@@ -95,7 +96,7 @@ class _CartListState extends State<CartList> {
                     borderRadius: BorderRadius.circular(5),
                     child: Image.network(
                       cartsList[index]['product image'],
-                      height: 200,
+                      height: size.height/5.5,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.fitHeight,
                     ),
@@ -109,8 +110,10 @@ class _CartListState extends State<CartList> {
                       cartsList[index]['product name'],
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Colors.grey[800]),
+                          fontSize: size.width / 27,
+                          color: Colors.grey[800],
+
+                      ),
                     ),
                   ),
 
@@ -155,7 +158,7 @@ class _CartListState extends State<CartList> {
                     margin: EdgeInsets.only(top: 5, left: 10),
                     //alignment: Alignment.topLeft,
                     child: Text(
-                      "Ordered size: ${cartsList[index]['ordered size']}",
+                      "Size: ${cartsList[index]['ordered size']}",
                       style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[700]),
@@ -200,13 +203,13 @@ class _CartListState extends State<CartList> {
                                     barrierDismissible: false,
                                     builder: (context){
                                       return AlertDialog(
-                                        title: Text("You have not enough point to buy this product."),
+                                        title: Text("You have not enough coin",textAlign: TextAlign.center),
                                         content: Container(
                                           height: 110,
                                           child: Column(
                                             children: [
                                               Container(
-                                            child: Text("You need ${(cartsList[index]['total price']-userPoint)} more points",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w500),),
+                                            child: Text("You need ${(cartsList[index]['total price']-userPoint)} more coin",style: TextStyle(color: Colors.green,fontWeight: FontWeight.w500),),
                                           ),
                                               SizedBox(height: 20,),
                                               FlatButton(

@@ -76,6 +76,7 @@ class _OrderListState extends State<OrderList> {
   }
 
   Widget orderListBuilder(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     fetchOrder();
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -83,7 +84,7 @@ class _OrderListState extends State<OrderList> {
           itemCount: orderList.length,
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.only(bottom: 20, top: 10),
+              margin: EdgeInsets.only(bottom: 10, top: 10),
               child: Column(
                 children: [
                   ///Product Image....
@@ -91,8 +92,7 @@ class _OrderListState extends State<OrderList> {
                     borderRadius: BorderRadius.circular(5),
                     child: Image.network(
                       orderList[index]['product image'],
-                      height: 200,
-                      width: MediaQuery.of(context).size.width,
+                      height: size.height/5.5,
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -105,18 +105,18 @@ class _OrderListState extends State<OrderList> {
                       orderList[index]['product name'],
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: size.width / 27,
                           color: Colors.grey[800]),
                     ),
                   ),
 
                   ///Product Quantity....
                   Container(
-                    margin: EdgeInsets.only(top: 10, left: 10),
+                    margin: EdgeInsets.only(top: 5, left: 10),
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Quantity: ${orderList[index]['product quantity']}",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: size.width / 27, color: Colors.grey[700]),
                     ),
                   ),
 
@@ -126,7 +126,7 @@ class _OrderListState extends State<OrderList> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Unit Coin: ${orderList[index]['unit point']}",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: size.width / 27, color: Colors.grey[700]),
                     ),
                   ),
 
@@ -136,7 +136,7 @@ class _OrderListState extends State<OrderList> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Total Coin: ${orderList[index]['total price']}",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: size.width / 27, color: Colors.grey[700]),
                     ),
                   ),
 
@@ -149,7 +149,7 @@ class _OrderListState extends State<OrderList> {
                           child: Text(
                             "Ordered size: ${orderList[index]['ordered size']}",
                             style: TextStyle(
-                                fontSize: 14, color: Colors.grey[700]),
+                                fontSize: size.width / 27, color: Colors.grey[700]),
                           ),
                         ),
 
@@ -158,8 +158,8 @@ class _OrderListState extends State<OrderList> {
                     margin: EdgeInsets.only(top: 5, left: 10),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Order date: ${DateFormat("dd MMMM, yyyy - hh:mm:aa").format(DateTime.fromMillisecondsSinceEpoch(int.parse(orderList[index]['ordered date'])))}",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      "Order date: ${DateFormat("dd/MMM/yy - hh:mm:aa").format(DateTime.fromMillisecondsSinceEpoch(int.parse(orderList[index]['ordered date'])))}",
+                      style: TextStyle(fontSize: size.width / 27, color: Colors.grey[700]),
                     ),
                   ),
 
@@ -170,7 +170,7 @@ class _OrderListState extends State<OrderList> {
                     child: Text(
                       "Delivery Report: ${orderList[index]['delivery report']}",
                       style: TextStyle(
-                          fontSize: 14, color: Colors.grey[700]),
+                          fontSize: size.width / 27, color: Colors.grey[700]),
                     ),
                   ),
                   SizedBox(

@@ -195,7 +195,7 @@ class _GetRewardPointState extends State<GetRewardPoint> {
               barrierDismissible: false,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("You got ${points[0]['point']} points"),
+                  title: Text("You got ${points[0]['point']} points",textAlign: TextAlign.center),
                   content: FlatButton(
                     color: Colors.deepOrange,
                     onPressed: () {

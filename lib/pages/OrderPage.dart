@@ -209,28 +209,28 @@ class _OrderState extends State<Order> {
                 child: Text("${particularCartList[0]['product name']}",
                 style: TextStyle(color: Colors.grey[800],fontWeight: FontWeight.w500,fontSize: 16),),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 10,),
 
               Container(
                 alignment: Alignment.topLeft,
                 child: Text("Order Quantity: ${particularCartList[0]['product quantity']}",
                   style: TextStyle(color: Colors.grey[700],fontWeight: FontWeight.w500,fontSize: 15),),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 5,),
 
               Container(
                 alignment: Alignment.topLeft,
                 child: Text("Unit Coin: ${particularCartList[0]['unit point']}",
                   style: TextStyle(color: Colors.grey[700],fontWeight: FontWeight.w500,fontSize: 15),),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 5,),
 
               Container(
                 alignment: Alignment.topLeft,
                 child: Text("Total Coin: ${particularCartList[0]['total price']}",
                   style: TextStyle(color: Colors.grey[700],fontWeight: FontWeight.w500,fontSize: 15),),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 5,),
 
               particularCartList[0]['ordered size']==null? Container() :
               Container(
@@ -376,7 +376,7 @@ class _OrderState extends State<Order> {
               barrierDismissible: false,
               builder: (context){
                 return AlertDialog(
-                  title: Text("Order Confirmation Successful."),
+                  title: Text("Order Confirmation Successful",textAlign: TextAlign.center),
                   content: FlatButton(
                     color: Colors.deepOrange,
                     onPressed: (){Navigator.of(context).pop();Navigator.of(context).pop();},
@@ -396,7 +396,7 @@ class _OrderState extends State<Order> {
           barrierDismissible: false,
           builder: (context){
             return AlertDialog(
-              title: Text(errorMgs.toString()),
+              title: Text(errorMgs.toString(),textAlign: TextAlign.center),
               content: FlatButton(
                 color: Colors.deepOrange,
                 onPressed: ()=> Navigator.of(context).pop(),

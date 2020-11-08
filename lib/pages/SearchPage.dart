@@ -5,19 +5,20 @@ import 'ProductDetailsPage.dart';
 
 // ignore: must_be_immutable
 class Search extends StatefulWidget {
-
   String userPhone;
   dynamic userPoint;
-  Search({this.userPhone,this.userPoint});
+
+  Search({this.userPhone, this.userPoint});
 
   @override
-  _SearchState createState() => _SearchState(this.userPhone,this.userPoint);
+  _SearchState createState() => _SearchState(this.userPhone, this.userPoint);
 }
 
 class _SearchState extends State<Search> {
   String userPhone;
   dynamic userPoint;
-  _SearchState(this.userPhone,this.userPoint);
+
+  _SearchState(this.userPhone, this.userPoint);
 
   TextEditingController searchEditingController = TextEditingController();
   bool isSearch = false;
@@ -69,7 +70,7 @@ class _SearchState extends State<Search> {
   }
 
   Widget customSearch(BuildContext context) {
-    Size size= MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     fetchSearchProducts();
     return searchedProducts.length == 0
         ? noDataFoundMgs()
@@ -79,7 +80,7 @@ class _SearchState extends State<Search> {
             child: GridView.builder(
               itemCount: searchedProducts.length,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: size.width/2,
+                  maxCrossAxisExtent: size.width / 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   childAspectRatio: 0.7),
@@ -88,16 +89,22 @@ class _SearchState extends State<Search> {
               itemBuilder: (context, index) => Card(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> ProductDetails(
-                      userPhone: userPhone,
-                      userPoint: userPoint,
-                      productId: searchedProducts[index]['id'],
-                      productName: searchedProducts[index]['name'],
-                      productImage: searchedProducts[index]['image'],
-                      productDesc: searchedProducts[index]['description'],
-                      productPoint: searchedProducts[index]['price'],
-                      productSize: searchedProducts[index]['size'],
-                    )));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                                  userPhone: userPhone,
+                                  userPoint: userPoint,
+                                  productId: searchedProducts[index]['id'],
+                                  productName: searchedProducts[index]['name'],
+                                  productImage: searchedProducts[index]
+                                      ['image'],
+                                  productDesc: searchedProducts[index]
+                                      ['description'],
+                                  productPoint: searchedProducts[index]
+                                      ['price'],
+                                  productSize: searchedProducts[index]['size'],
+                                )));
                   },
                   splashColor: Colors.deepOrange[200],
                   child: Column(
@@ -107,7 +114,7 @@ class _SearchState extends State<Search> {
                         child: Image.network(
                           searchedProducts[index]['image'],
                           width: MediaQuery.of(context).size.width,
-                          height: 100,
+                          height: size.height / 7,
                           fit: BoxFit.fitHeight,
                         ),
                       ),
@@ -116,7 +123,9 @@ class _SearchState extends State<Search> {
                         contentPadding: EdgeInsets.all(5),
                         title: Text(
                           searchedProducts[index]['name'],
-                          style: TextStyle(color: Colors.grey[800]),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontSize: size.width / 27),
                           maxLines: 3,
                         ),
                         subtitle: Container(
@@ -128,7 +137,12 @@ class _SearchState extends State<Search> {
                                 child: Text(
                                   "৳: ${searchedProducts[index]['price']} Coin",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(color: Colors.deepOrange),
+                                  style: TextStyle(
+                                      color: Colors.deepOrange,
+                                      fontSize: size.width / 21,
+                                      fontWeight: FontWeight.w500
+                                  ),
+                                  maxLines: 2,
                                 ),
                               ),
                             ],

@@ -11,11 +11,12 @@ class UpdateAccount extends StatefulWidget {
   String userAddress;
   dynamic userPoint;
 
-  UpdateAccount({this.userPhone, this.userName, this.userAddress,this.userPoint});
+  UpdateAccount(
+      {this.userPhone, this.userName, this.userAddress, this.userPoint});
 
   @override
-  _UpdateAccountState createState() =>
-      _UpdateAccountState(this.userPhone, this.userName, this.userAddress,this.userPoint);
+  _UpdateAccountState createState() => _UpdateAccountState(
+      this.userPhone, this.userName, this.userAddress, this.userPoint);
 }
 
 class _UpdateAccountState extends State<UpdateAccount> {
@@ -23,9 +24,9 @@ class _UpdateAccountState extends State<UpdateAccount> {
   String userName;
   String userAddress;
   dynamic userPoint;
-  _UpdateAccountState(this.userPhone, this.userName, this.userAddress,this.userPoint);
 
-
+  _UpdateAccountState(
+      this.userPhone, this.userName, this.userAddress, this.userPoint);
 
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -41,7 +42,7 @@ class _UpdateAccountState extends State<UpdateAccount> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     AdMobService.hideBannerAd();
   }
@@ -64,6 +65,7 @@ class _UpdateAccountState extends State<UpdateAccount> {
       body: bodyUI(),
     );
   }
+
 
   Widget bodyUI() {
     return isLoading
@@ -92,8 +94,8 @@ class _UpdateAccountState extends State<UpdateAccount> {
                 child: Column(
                   children: [
                     Container(
-                      width: 100,
-                      height: 100,
+                      width: 130,
+                      height: 130,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey, width: 1),
                         shape: BoxShape.circle,
@@ -103,9 +105,17 @@ class _UpdateAccountState extends State<UpdateAccount> {
                             fit: BoxFit.cover),
                       ),
                     ),
-                    Text("$userPhone",style: TextStyle(color: Colors.deepOrange,fontSize: 18,fontWeight: FontWeight.w500),),
+
+                    Text(
+                      "$userPhone",
+                      style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                    ),
 
                     SizedBox(height: 10),
+
                     ///Horizontal Line....
                     Container(
                         color: Colors.grey,
@@ -170,8 +180,7 @@ class _UpdateAccountState extends State<UpdateAccount> {
                         highlightedBorderColor: Colors.green,
                         focusColor: Colors.green,
                         splashColor: Colors.green[200],
-                        borderSide:
-                            BorderSide(color: Colors.green, width: 2.0),
+                        borderSide: BorderSide(color: Colors.green, width: 2.0),
                         child: Container(
                           width: 100,
                           child: Row(
@@ -206,14 +215,17 @@ class _UpdateAccountState extends State<UpdateAccount> {
       "name": userName,
       "address": userAddress,
     }).then((data) async {
-      setState((){ isLoading = false;});
+      setState(() {
+        isLoading = false;
+      });
+
       ///Show Alert Dialog....
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              title: Text("Information Updated"),
+              title: Text("Information Updated",textAlign: TextAlign.center),
               content: FlatButton(
                 color: Colors.deepOrange,
                 onPressed: () {
@@ -229,7 +241,9 @@ class _UpdateAccountState extends State<UpdateAccount> {
           });
     }, onError: (errorMgs) {
       print(errorMgs.toString());
-      setState((){ isLoading = false;});
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 }

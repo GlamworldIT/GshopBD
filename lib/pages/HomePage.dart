@@ -24,6 +24,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String userPhone;
+
   _HomeState(this.userPhone);
 
   List users = [];
@@ -97,8 +98,12 @@ class _HomeState extends State<Home> {
           : products.length == 0
               ? noDataFoundMgs(context)
               : mainList(context),
-      drawer: NavigationDrawer(userPhone: userPhone, users: users,),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      drawer: NavigationDrawer(
+        userPhone: userPhone,
+        users: users,
+      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.shopping_cart_rounded,
@@ -119,7 +124,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
 
   Widget noDataFoundMgs(BuildContext context) {
     return Center(
@@ -143,7 +147,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget mainList(BuildContext context) {
-    Size size= MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     fetchProducts();
     return Container(
       padding: EdgeInsets.all(10),
@@ -151,7 +155,7 @@ class _HomeState extends State<Home> {
       child: GridView.builder(
         itemCount: products.length,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: size.width/2, //200,
+            maxCrossAxisExtent: size.width / 2, //200,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             childAspectRatio: 0.7),
@@ -180,7 +184,7 @@ class _HomeState extends State<Home> {
                   child: Image.network(
                     products[index]['image'],
                     width: MediaQuery.of(context).size.width,
-                    height: 100,
+                    height: size.height / 7,
                     fit: BoxFit.fitHeight,
                   ),
                 ),
@@ -189,7 +193,8 @@ class _HomeState extends State<Home> {
                   contentPadding: EdgeInsets.all(5),
                   title: Text(
                     "${products[index]['name']}",
-                    style: TextStyle(color: Colors.grey[800]),
+                    style: TextStyle(
+                        color: Colors.grey[800], fontSize: size.width / 27),
                     maxLines: 3,
                   ),
                   subtitle: Container(
@@ -199,10 +204,15 @@ class _HomeState extends State<Home> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                           "৳: ${products[index]['price']} Coin",
-                           textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.deepOrange),
+                            "৳: ${products[index]['price']} Coin",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.deepOrange,
+                                fontSize: size.width / 21,
+                              fontWeight: FontWeight.w500
                             ),
+                            maxLines: 2,
+                          ),
                         ),
                       ],
                     ),
@@ -219,16 +229,15 @@ class _HomeState extends State<Home> {
   }
 }
 
-
 // ignore: must_be_immutable
 class NavigationDrawer extends StatelessWidget {
-  NavigationDrawer({this.userPhone,this.users});
+  NavigationDrawer({this.userPhone, this.users});
+
   String userPhone;
   List users;
 
   @override
   Widget build(BuildContext context) {
-
     //fetchUser();
     return new Drawer(
       child: new Container(
@@ -240,19 +249,19 @@ class NavigationDrawer extends StatelessWidget {
             new UserAccountsDrawerHeader(
               accountName: users[0]['name'] == null
                   ? Text(
-                "Your Name Here",
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    color: Colors.white),
-              )
+                      "Your Name Here",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                          color: Colors.white),
+                    )
                   : Text(
-                "${users[0]['name']}",
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    color: Colors.white),
-              ),
+                      "${users[0]['name']}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                          color: Colors.white),
+                    ),
               accountEmail: Text(
                 "Coin: ${users[0]['point']}",
                 style: TextStyle(
@@ -280,11 +289,11 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => UpdateAccount(
-                            userPhone: userPhone,
-                            userName: users[0]['name'],
-                            userPoint: users[0]['point'],
-                            userAddress: users[0]['address'],
-                          )));
+                                userPhone: userPhone,
+                                userName: users[0]['name'],
+                                userPoint: users[0]['point'],
+                                userAddress: users[0]['address'],
+                              )));
                 },
                 leading: Icon(
                   Icons.person,
@@ -312,8 +321,8 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => Search(
-                            userPhone: userPhone,
-                          )));
+                                userPhone: userPhone,
+                              )));
                 },
                 leading: Icon(
                   Icons.search_rounded,
@@ -341,9 +350,9 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CartList(
-                            userPhone: userPhone,
-                            userPoint: users[0]['point'],
-                          )));
+                                userPhone: userPhone,
+                                userPoint: users[0]['point'],
+                              )));
                 },
                 leading: Icon(
                   Icons.shopping_cart_rounded,
@@ -371,8 +380,8 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => OrderList(
-                            userPhone: userPhone,
-                          )));
+                                userPhone: userPhone,
+                              )));
                 },
                 leading: Icon(
                   Icons.playlist_add_check_rounded,
@@ -400,8 +409,8 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => GetRewardPoint(
-                            userPhone: userPhone,
-                          )));
+                                userPhone: userPhone,
+                              )));
                 },
                 leading: Icon(
                   Icons.widgets_rounded,
@@ -449,14 +458,14 @@ class NavigationDrawer extends StatelessWidget {
             Card(
               elevation: 0,
               child: ListTile(
-                onTap: () async{
-                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                onTap: () async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
                   preferences.clear().then((value) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => MyApp()),
-                            (route) => false);
+                        (route) => false);
                   });
-
                 },
                 leading: Icon(
                   Icons.logout,
@@ -480,4 +489,3 @@ class NavigationDrawer extends StatelessWidget {
     );
   }
 }
-
