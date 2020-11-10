@@ -32,18 +32,26 @@ class _UpdateAccountState extends State<UpdateAccount> {
   TextEditingController addressController = TextEditingController();
 
   bool isLoading = false;
+  final ams = AdMobService();
+  InterstitialAd interstitialAd;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdMobService().getAdMobAppId());
+    interstitialAd = ams.getInterstitialAd();
+    interstitialAd.load();
     retrievePreviousData();
   }
 
   @override
   void dispose() {
     super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
     AdMobService.hideBannerAd();
   }
 

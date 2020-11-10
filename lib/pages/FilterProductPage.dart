@@ -1,103 +1,149 @@
+
 import 'package:flutter/material.dart';
-import 'package:gshop/shared/AdmobService.dart';
+import 'package:gshop/pages/ProductDetailsPage.dart';
 import 'package:gshop/shared/DatabaseManager.dart';
-import 'ProductDetailsPage.dart';
+import 'package:gshop/shared/formDecoration.dart';
 
 // ignore: must_be_immutable
-class Search extends StatefulWidget {
+class FilterProduct extends StatefulWidget {
   String userPhone;
   dynamic userPoint;
 
-  Search({this.userPhone, this.userPoint});
+  FilterProduct({this.userPhone, this.userPoint});
 
   @override
-  _SearchState createState() => _SearchState(this.userPhone, this.userPoint);
+  _FilterProductState createState() =>
+      _FilterProductState(this.userPhone, this.userPoint);
 }
 
-class _SearchState extends State<Search> {
+class _FilterProductState extends State<FilterProduct> {
   String userPhone;
   dynamic userPoint;
 
-  _SearchState(this.userPhone, this.userPoint);
+  _FilterProductState(this.userPhone, this.userPoint);
 
-  TextEditingController searchEditingController = TextEditingController();
-  bool isSearch = false;
-  String searchQuery;
+  String minCoin = "", maxCoin = "";
+  List products = [];
   List searchedProducts = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    AdMobService.hideBannerAd();
+    fetchProducts();
   }
 
-  Future fetchSearchProducts() async {
-    dynamic results = await DatabaseManager().getSearchedProducts(searchQuery);
-    setState(() {
-      searchedProducts = results;
-    });
+  Future fetchProducts() async {
+    dynamic result = await DatabaseManager().getProducts();
+    if (result != null) {
+      setState(() {
+        products = result;
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: customAppBar(),
-      body: isSearch ? customSearch(context) : noDataFoundMgs(),
+      backgroundColor: Colors.white,
+      appBar: customAppBer(),
+      body: isLoading ? dualRing() : bodyUI(),
     );
   }
-  customAppBar() {
+
+  Widget customAppBer() {
+    Size size = MediaQuery.of(context).size;
     return AppBar(
       iconTheme: IconThemeData(
         color: Colors.deepOrange,
       ),
       backgroundColor: Colors.white,
-      elevation: 0,
-      title: Container(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-        child: TextFormField(
-          textCapitalization: TextCapitalization.words,
-          keyboardType: TextInputType.text,
-          //cursorColor: Colors.grey[700],
-          style: TextStyle(fontSize: 17, color: Colors.deepOrange[800]),
-          controller: searchEditingController,
-          decoration: InputDecoration(
-            hintText: 'Search products...',
-            hintStyle: TextStyle(color: Colors.grey[400]),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(5),
+      title:
+          ///Search Bar Container....
+          Container(
+        // color: Colors.grey[200],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: size.width / 3.5,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "min coin",
+                        hintStyle: TextStyle(color: Colors.grey)),
+                    onChanged: (min) => minCoin = min,
+                  ),
+                ),
+                SizedBox(
+                  width: size.width / 25,
+                ),
+                Container(
+                  width: size.width / 3.5,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "max coin",
+                        hintStyle: TextStyle(color: Colors.grey)),
+                    onChanged: (max) => maxCoin = max,
+                  ),
+                ),
+              ],
             ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            filled: false,
-            suffixIcon: IconButton(
-              splashRadius: 25,
-              icon: Icon(
-                Icons.clear,
-                color: Colors.grey,
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                border: Border.all(color: Colors.transparent, width: 1),
+                shape: BoxShape.circle,
               ),
-              onPressed: () {
-                searchEditingController.clear();
-                setState(() {
-                  isSearch = false;
-                });
-              },
+              child: IconButton(
+                onPressed: () {
+                  if (maxCoin != "" && minCoin != "") {
+                    setState(() => isLoading = true);
+                    getSearchedProduct();
+                  } else {
+                    setState(() => isLoading = false);
+                    ///Show Alert Dialog....
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Search field can't be empty !",
+                                style: TextStyle(color: Colors.redAccent),
+                                textAlign: TextAlign.center),
+                            content: FlatButton(
+                              color: Colors.deepOrange,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              splashColor: Colors.deepOrange[300],
+                              child: Text(
+                                "Close",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
+                        });
+                  }
+                },
+                splashColor: Colors.deepOrange[400],
+                splashRadius: 25,
+                color: Colors.blue,
+                icon: Icon(
+                  Icons.search,
+                  size: 25,
+                  color: Colors.deepOrange,
+                ),
+              ),
             ),
-          ),
-          onChanged: (value) {
-            setState(() {
-              searchQuery = value;
-              if (searchQuery == "") {
-                isSearch = false;
-              } else {
-                isSearch = true;
-              }
-            });
-          },
+          ],
         ),
       ),
     );
@@ -114,24 +160,35 @@ class _SearchState extends State<Search> {
             color: Colors.grey,
             size: 70.0,
           ),
-          Text(
-            "No Products",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey, fontSize: 20.0),
-          ),
         ],
       ),
     );
   }
 
-  Widget customSearch(BuildContext context) {
+  void getSearchedProduct(){
+    searchedProducts.clear();
+    int min = int.parse(minCoin);
+    int max = int.parse(maxCoin);
+
+    for(int i=0; i<products.length; i++){
+      if(products[i]['price']>=min && products[i]['price']<=max){
+        setState(() {
+          searchedProducts.add(products[i]);
+        });
+      }
+    }
+    setState(()=> isLoading=false);
+  }
+
+  Widget bodyUI() {
     Size size = MediaQuery.of(context).size;
-    fetchSearchProducts();
     return searchedProducts.length == 0
         ? noDataFoundMgs()
         : Container(
             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
             color: Colors.grey[200],
+            height: size.height,
+            width: size.width,
             child: GridView.builder(
               itemCount: searchedProducts.length,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -195,8 +252,7 @@ class _SearchState extends State<Search> {
                                   style: TextStyle(
                                       color: Colors.deepOrange,
                                       fontSize: size.width / 21,
-                                      fontWeight: FontWeight.w500
-                                  ),
+                                      fontWeight: FontWeight.w500),
                                   maxLines: 2,
                                 ),
                               ),
@@ -211,6 +267,4 @@ class _SearchState extends State<Search> {
             ),
           );
   }
-
-
 }

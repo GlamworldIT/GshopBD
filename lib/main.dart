@@ -1,8 +1,16 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:gshop/pages/LoginPage.dart';
+import 'package:gshop/pages/RegisterPage.dart';
+import 'package:gshop/shared/AdmobService.dart';
 
 
-void main() {
+// void main() {
+//   runApp(MyApp());
+// }
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseAdMob.instance.initialize(appId: AdMobService().getAdMobAppId());
   runApp(MyApp());
 }
 
@@ -26,7 +34,7 @@ class MyApp extends StatelessWidget {
         cursorColor: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LogIn(),
+      home: Register(),
       debugShowCheckedModeBanner: false,
     );
   }

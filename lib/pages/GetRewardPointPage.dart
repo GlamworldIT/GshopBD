@@ -5,7 +5,7 @@ import 'package:gshop/shared/AdmobService.dart';
 import 'package:gshop/shared/DatabaseManager.dart';
 import 'package:gshop/shared/RoundDoubleValue.dart';
 import 'package:gshop/shared/formDecoration.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 // ignore: must_be_immutable
 class GetRewardPoint extends StatefulWidget {
@@ -24,18 +24,20 @@ class _GetRewardPointState extends State<GetRewardPoint> {
   bool isLoading = true;
   List user;
   List points=[];
-  String videoURL ="https://www.youtube.com/watch?v=QFiTn9iuIhY";
-  YoutubePlayerController _youtubeController;
+  // String videoURL ="https://www.youtube.com/watch?v=QFiTn9iuIhY";
+  // YoutubePlayerController _youtubeController;
+  final ams = AdMobService();
+  InterstitialAd interstitialAd;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdMobService().getAdMobAppId());
-
-    ///Youtube Video Player Controller...
-    _youtubeController = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(videoURL),
-    );
+    // ///Youtube Video Player Controller...
+    // _youtubeController = YoutubePlayerController(
+    //   initialVideoId: YoutubePlayer.convertUrlToId(videoURL),
+    // );
+    interstitialAd = ams.getInterstitialAd();
+    interstitialAd.load();
     fetchUser();
   }
 
@@ -61,6 +63,11 @@ class _GetRewardPointState extends State<GetRewardPoint> {
   @override
   void dispose() {
     super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
     AdMobService.hideBannerAd();
   }
 
@@ -157,10 +164,10 @@ class _GetRewardPointState extends State<GetRewardPoint> {
                 ),
                 SizedBox(height: size.height/30),
 
-                YoutubePlayer(
-                  controller: _youtubeController,
-                ),
-                SizedBox(height: size.height/10,),
+                // YoutubePlayer(
+                //   controller: _youtubeController,
+                // ),
+                // SizedBox(height: size.height/10,),
 
               ],
             ),
@@ -186,6 +193,7 @@ class _GetRewardPointState extends State<GetRewardPoint> {
 
         Firestore.instance.collection("Users").document(userPhone).updateData({
           'point': rewardPoint,
+          'video watched': (user[0]['video watched']+1),
         }).then((value) {
           setState(() => isLoading = false);
 

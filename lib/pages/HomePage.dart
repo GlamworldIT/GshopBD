@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gshop/main.dart';
 import 'package:gshop/pages/CartListPage.dart';
+import 'package:gshop/pages/FilterProductPage.dart';
+import 'package:gshop/pages/VerifyReferralPage.dart';
 import 'package:gshop/pages/GetRewardPointPage.dart';
 import 'package:gshop/pages/OrderListPage.dart';
 import 'package:gshop/pages/ProductDetailsPage.dart';
 import 'package:gshop/pages/SearchPage.dart';
+import 'package:gshop/pages/MyReferralCodePage.dart';
 import 'package:gshop/pages/UpdateAccountPage.dart';
 import 'package:gshop/shared/AdmobService.dart';
 import 'package:gshop/shared/DatabaseManager.dart';
@@ -30,7 +33,6 @@ class _HomeState extends State<Home> {
   List users = [];
   List products = [];
   bool isLoading = true;
-  bool isBanner = false;
 
   @override
   void initState() {
@@ -62,15 +64,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    fetchProducts();
     fetchUser();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         elevation: 0,
-        // title: Text(
-        //   "GShopBD",
-        //   style: TextStyle(fontSize: 18),
-        // ),
+        title: Text(
+          "GShop BD",
+          style: TextStyle(fontSize: 18),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -150,7 +153,7 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
     fetchProducts();
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
       color: Colors.grey[200],
       child: GridView.builder(
         itemCount: products.length,
@@ -204,7 +207,7 @@ class _HomeState extends State<Home> {
                         Container(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            "৳: ${products[index]['price']} Coin",
+                            "${products[index]['price']} Coin",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.deepOrange,
@@ -232,7 +235,6 @@ class _HomeState extends State<Home> {
 // ignore: must_be_immutable
 class NavigationDrawer extends StatelessWidget {
   NavigationDrawer({this.userPhone, this.users});
-
   String userPhone;
   List users;
 
@@ -341,6 +343,35 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
 
+            ///Filter....
+            Card(
+              elevation: 0,
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FilterProduct(
+                            userPhone: userPhone,userPoint: users[0]['point'],
+                          )));
+                },
+                leading: Icon(
+                  Icons.filter_alt_rounded,
+                  color: Colors.deepOrange,
+                  size: 30,
+                ),
+                title: Text(
+                  "Filter Product",
+                  style: TextStyle(color: Colors.grey[800], fontSize: 15),
+                ),
+                trailing: Icon(
+                  Icons.arrow_right,
+                  size: 30,
+                  color: Colors.deepOrange[200],
+                ),
+              ),
+            ),
+
             ///Cart List....
             Card(
               elevation: 0,
@@ -400,7 +431,7 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
 
-            ///Get Reward Point...
+            ///Get Reward Coin...
             Card(
               elevation: 0,
               child: ListTile(
@@ -418,7 +449,7 @@ class NavigationDrawer extends StatelessWidget {
                   size: 30,
                 ),
                 title: Text(
-                  "Get Coin",
+                  "Get Free Coin",
                   style: TextStyle(color: Colors.grey[800], fontSize: 15),
                 ),
                 trailing: Icon(
@@ -428,6 +459,61 @@ class NavigationDrawer extends StatelessWidget {
                 ),
               ),
             ),
+
+            ///My Referral Code...
+            Card(
+              elevation: 0,
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyReferralCode(referralCode: users[0]['phone'],)));
+                },
+                leading: Icon(
+                  Icons.link,
+                  color: Colors.deepOrange,
+                  size: 30,
+                ),
+                title: Text(
+                  "My Referral Code",
+                  style: TextStyle(color: Colors.grey[800], fontSize: 15),
+                ),
+                trailing: Icon(
+                  Icons.arrow_right,
+                  size: 30,
+                  color: Colors.deepOrange[200],
+                ),
+              ),
+            ),
+
+            ///Verify Referral Code....
+            users[0]['verify referral']=='false'?
+            Card(
+              elevation: 0,
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => VerifyReferral(userPhone: userPhone,)));
+                },
+                leading: Icon(
+                  Icons.link,
+                  color: Colors.deepOrange,
+                  size: 30,
+                ),
+                title: Text(
+                  "Verify Referral Code",
+                  style: TextStyle(color: Colors.grey[800], fontSize: 15),
+                ),
+                trailing: Icon(
+                  Icons.arrow_right,
+                  size: 30,
+                  color: Colors.deepOrange[200],
+                ),
+              ),
+            ): Container(),
 
             ///Contact with us...
             Card(

@@ -27,17 +27,17 @@ class _LogInState extends State<LogIn> {
     super.initState();
     // AdMobService.hideBannerAd();
     // fetchUser();
-    checkAlreadyCheckedIn();
+    // checkAlreadyCheckedIn();
   }
 
-  checkAlreadyCheckedIn() async{
-    preferences = await SharedPreferences.getInstance();
-    String phone= preferences.getString('phone');
-    String password= preferences.getString('password');
-    if(!(phone==null) && !(password==null)){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Home(userPhone: phone)),(route) => false);
-    }
-  }
+  // checkAlreadyCheckedIn() async{
+  //   preferences = await SharedPreferences.getInstance();
+  //   String phone= preferences.getString('phone');
+  //   String password= preferences.getString('password');
+  //   if(!(phone==null) && !(password==null)){
+  //     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Home(userPhone: phone)),(route) => false);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -84,7 +84,7 @@ class _OrderListState extends State<OrderList> {
           itemCount: orderList.length,
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.only(bottom: 10, top: 10),
+              margin: EdgeInsets.only(bottom: 5, top: 5),
               child: Column(
                 children: [
                   ///Product Image....

@@ -38,18 +38,27 @@ class _OrderState extends State<Order> {
   TextEditingController addressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
+  final ams = AdMobService();
+  InterstitialAd interstitialAd;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdMobService().getAdMobAppId());
+    interstitialAd = ams.getInterstitialAd();
+    interstitialAd.load();
     fetchCartList();
   }
   @override
   void dispose(){
     super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
     AdMobService.hideBannerAd();
-    showRewardVideo();
+
   }
 
   Future fetchCartList() async{
@@ -95,7 +104,6 @@ class _OrderState extends State<Order> {
       isLoading = false;
     });
     AdMobService.showHomeBannerAd();
-    loadRewardVideo();
   }
 
   @override
@@ -345,6 +353,7 @@ class _OrderState extends State<Order> {
     }).then((value) {
       Firestore.instance.collection("Users").document(userPhone).updateData({
         'point': restUserPoint,
+        'product ordered': (users[0]['product ordered']+1)
       }).then((value) {
         Firestore.instance.collection("Customer Order").document(userPhone+date).setData({
           'id': userPhone+date,
@@ -409,20 +418,4 @@ class _OrderState extends State<Order> {
     });
   }
 
-  loadRewardVideo() {
-    RewardedVideoAd.instance.load(
-        adUnitId: AdMobService().getRewardAdId(),
-        targetingInfo: MobileAdTargetingInfo());
-  }
-
-  showRewardVideo() {
-    //loadRewardVideo();
-    RewardedVideoAd.instance..show();
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        Navigator.of(context).pop();
-      }
-    };
-  }
 }

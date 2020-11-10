@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseManager {
-  final CollectionReference users =
-      Firestore.instance.collection("Users");
+  final CollectionReference users = Firestore.instance.collection("Users");
 
   final CollectionReference searchProducts =
-  Firestore.instance.collection("Products");
-
+      Firestore.instance.collection("Products");
 
   Future getUsers(String searchQuery) async {
     List userList = [];
@@ -44,11 +42,13 @@ class DatabaseManager {
     }
   }
 
+  ///.where('available stock', isGreaterThan: '')
+  ///.limit(10)
   Future getProducts() async {
     List searchList = [];
     try {
       await searchProducts
-      .where('available stock', isGreaterThan: '')
+          .where('available stock', isGreaterThan: '')
           .getDocuments()
           .then((querySnapshot) {
         querySnapshot.documents.forEach((element) {
@@ -63,8 +63,8 @@ class DatabaseManager {
   }
 
   Future getCartList(String phoneNumber) async {
-
-    final CollectionReference cartProducts = Firestore.instance.collection(phoneNumber);
+    final CollectionReference cartProducts =
+        Firestore.instance.collection(phoneNumber);
 
     List cartList = [];
     try {
@@ -84,8 +84,8 @@ class DatabaseManager {
   }
 
   Future getOrderList(String phoneNumber) async {
-
-    final CollectionReference orderedProducts = Firestore.instance.collection(phoneNumber);
+    final CollectionReference orderedProducts =
+        Firestore.instance.collection(phoneNumber);
 
     List cartList = [];
     try {

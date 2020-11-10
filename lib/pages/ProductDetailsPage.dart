@@ -68,18 +68,26 @@ class _ProductDetailsState extends State<ProductDetails> {
   final _formKey = GlobalKey<FormState>();
   String orderedSize;
   bool needSize = false;
+  final ams = AdMobService();
+  InterstitialAd interstitialAd;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: AdMobService().getAdMobAppId());
+    interstitialAd = ams.getInterstitialAd();
+    interstitialAd.load();
     AdMobService.showHomeBannerAd();
   }
 
   @override
   void dispose() {
     super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
     AdMobService.hideBannerAd();
   }
 

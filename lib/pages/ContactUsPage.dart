@@ -1,3 +1,4 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gshop/shared/AdmobService.dart';
@@ -8,16 +9,26 @@ class ContactUs extends StatefulWidget {
 }
 
 class _ContactUsState extends State<ContactUs> {
+  final ams = AdMobService();
+  InterstitialAd interstitialAd;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    interstitialAd = ams.getInterstitialAd();
+    interstitialAd.load();
     AdMobService.showHomeBannerAd();
   }
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
     AdMobService.hideBannerAd();
   }
 
