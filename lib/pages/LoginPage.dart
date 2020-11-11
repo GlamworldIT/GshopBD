@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gshop/pages/ForgotPasswordPage.dart';
 import 'package:gshop/pages/HomePage.dart';
 import 'package:gshop/pages/RegisterPage.dart';
 import 'package:gshop/shared/formDecoration.dart';
@@ -12,14 +13,13 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-
   final _formKey = GlobalKey<FormState>();
   String phone;
   String password;
   bool isLoading = false;
   String errorMgs = '';
   SharedPreferences preferences;
-
+  bool forgotPassword = false;
 
   @override
   void initState() {
@@ -42,8 +42,8 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.yellowAccent[700],
-        body: bodyUITwo(context),
+      backgroundColor: Colors.yellowAccent[700],
+      body: bodyUITwo(context),
     );
   }
 
@@ -53,7 +53,7 @@ class _LogInState extends State<LogIn> {
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: size.height/25),
+            margin: EdgeInsets.only(top: size.height / 25),
             height: size.height * 0.7,
             width: size.width,
             child: Container(
@@ -78,28 +78,26 @@ class _LogInState extends State<LogIn> {
           ),
           Container(
             margin:
-            EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
             child: Column(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   child: Container(
-                    child: Image.asset("assets/image/lg.png",
-                    height: 100,),
+                    child: Image.asset(
+                      "assets/image/lg.png",
+                      height: 100,
+                    ),
                   ),
                 ),
-                // Text(
-                //   "Login",
-                //   style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: MediaQuery.of(context).size.height / 25),
-                // ),MediaQuery.of(context).size.height / 15MediaQuery.of(context).size.height / 15
                 SizedBox(height: MediaQuery.of(context).size.height / 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(50),bottomLeft: Radius.circular(50)),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         color: Colors.white,
@@ -111,70 +109,86 @@ class _LogInState extends State<LogIn> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-
                               TextFormField(
                                 decoration: textInputDecoration,
                                 keyboardType: TextInputType.phone,
+                                maxLength: 11,
+                                maxLengthEnforced: false,
                                 validator: (value) =>
-                                value.isEmpty ? "Enter Phone Number" : null,
+                                    value.isEmpty ? "Enter Phone Number" : null,
                                 onChanged: (value) {
                                   setState(() => phone = value);
                                 },
                               ),
-                              SizedBox(height: size.height/35,),
-
+                              SizedBox(
+                                height: size.height / 35,
+                              ),
                               TextFormField(
                                 obscureText: true,
-                                decoration: textInputDecoration.copyWith(hintText: "Password",prefixIcon: Icon(Icons.security_rounded)),
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: "Password",
+                                    prefixIcon: Icon(Icons.security_rounded)),
                                 keyboardType: TextInputType.text,
                                 validator: (value) =>
-                                value.isEmpty ? "Enter Password" : null,
+                                    value.isEmpty ? "Enter Password" : null,
                                 onChanged: (value) {
                                   setState(() => password = value);
                                 },
                               ),
-
                               Padding(
-                                padding: const EdgeInsets.only(top: 10,right: 10),
+                                padding:
+                                    const EdgeInsets.only(top: 10, right: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text("New user? ",style: TextStyle(color: Colors.grey[800],fontSize: size.width/25)),
+                                    Text("New user? ",
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: size.width / 25)),
                                     InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> Register()));
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Register()));
                                       },
                                       splashColor: Colors.white,
-                                      child: Text("register",style: TextStyle(color: Colors.deepOrange,fontSize: size.width/22),
+                                      child: Text(
+                                        "register",
+                                        style: TextStyle(
+                                            color: Colors.deepOrange,
+                                            fontSize: size.width / 22),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: size.height/30,),
-
+                              SizedBox(
+                                height: size.height / 30,
+                              ),
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   if (_formKey.currentState.validate()) {
-                                    if (phone.length==11) {
+                                    if (phone.length == 11) {
                                       setState(() {
                                         isLoading = true;
-                                        errorMgs ="";
+                                        errorMgs = "";
                                         userLogIn(context);
                                       });
                                     } else {
                                       setState(() {
-                                        errorMgs = "Phone number must be 11 digit";
+                                        errorMgs =
+                                            "Phone number must be 11 digit";
                                         isLoading = false;
                                       });
                                     }
                                   } else {
                                     setState(() {
-                                     errorMgs ="";
+                                      errorMgs = "";
                                       isLoading = false;
                                     });
                                   }
-
                                 },
                                 splashColor: Colors.white,
                                 child: Container(
@@ -185,25 +199,83 @@ class _LogInState extends State<LogIn> {
                                     color: Colors.deepOrange,
                                     border: Border.all(
                                         color: Colors.deepOrange, width: 1.0),
-                                    borderRadius:  BorderRadius.only(topRight: Radius.circular(50),bottomLeft: Radius.circular(50)),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(50),
+                                        bottomLeft: Radius.circular(50)),
                                   ),
                                   child: Text(
                                     "Sign in",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize:
-                                        MediaQuery.of(context).size.height /
-                                            40,
+                                            MediaQuery.of(context).size.height /
+                                                40,
                                         fontWeight: FontWeight.w500),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                height: 20.0,
+                                height: 10.0,
                               ),
+
+                              SizedBox(height: 10),
                               Container(
-                                child: isLoading ? dualRing() : Container(child: Text(errorMgs, style: TextStyle(color: Colors.red),),),
+                                child: isLoading
+                                    ? dualRing()
+                                    : Container(
+                                        child: Text(
+                                          errorMgs,
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
                               ),
+                              forgotPassword
+                                  ? Container(
+                                padding: EdgeInsets.only(top: 20),
+                                alignment: Alignment.bottomRight,
+                                child: InkWell(
+                                  onTap: (){
+                                    if(phone.length==11){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword(phone: phone,)));
+                                    }
+                                    else{
+                                      ///Show Alert Dialog....
+                                      showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text("Enter your phone number correctly",
+                                                  style: TextStyle(color: Colors.deepOrange),
+                                                  textAlign: TextAlign.center),
+                                              content: Container(
+                                                child: FlatButton(
+                                                  color: Colors.deepOrange,
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    setState(() {
+                                                      isLoading = false;
+                                                      errorMgs="";
+                                                    });
+                                                  },
+                                                  splashColor: Colors.deepOrange[300],
+                                                  child: Text(
+                                                    "Close",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                  },
+                                  child: Text(
+                                    "Forgot Password ?",
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                ),
+                              )
+                                  : Container(),
                             ],
                           ),
                         ),
@@ -219,46 +291,42 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-
   Future userLogIn(BuildContext context) async {
     QuerySnapshot querySnapshot = await Firestore.instance
-        .collection("Users").where('phone', isEqualTo: phone).getDocuments();
-      List users = querySnapshot.documents;
+        .collection("Users")
+        .where('phone', isEqualTo: phone)
+        .getDocuments();
+    List users = querySnapshot.documents;
 
-      if(users.length!=0){
-        if(users[0]['password']==password){
-          preferences = await SharedPreferences.getInstance();
-          preferences.setString("phone", phone);
-          preferences.setString("password", password);
-          setState(() {
-            isLoading = false;
-            errorMgs ="";
-          });
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => Home(
-                    userPhone: phone,
-                  )),
-                  (route) => false);
-        }
-        else{
-          setState(() {
-            isLoading = false;
-            errorMgs ="Wrong password";
-          });
-        }
-      }
-      else{
+    if (users.length != 0) {
+      if (users[0]['password'] == password) {
+        preferences = await SharedPreferences.getInstance();
+        preferences.setString("phone", phone);
+        preferences.setString("password", password);
         setState(() {
           isLoading = false;
-          errorMgs ="Wrong phone number";
+          errorMgs = "";
+          forgotPassword = false;
+        });
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Home(
+                      userPhone: phone,
+                    )),
+            (route) => false);
+      } else {
+        setState(() {
+          isLoading = false;
+          errorMgs = "Wrong password";
+          forgotPassword = true;
         });
       }
-
-
+    } else {
+      setState(() {
+        isLoading = false;
+        errorMgs = "Wrong phone number";
+        forgotPassword = false;
+      });
+    }
   }
-
-
-
-
 }

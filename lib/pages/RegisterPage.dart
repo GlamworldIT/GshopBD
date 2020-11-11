@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gshop/pages/LoginPage.dart';
 import 'package:gshop/shared/formDecoration.dart';
@@ -19,6 +20,7 @@ class _RegisterState extends State<Register> {
   bool isLoading = false;
   String errorMgs = '';
   SharedPreferences preferences;
+  final _codeController = TextEditingController();
 
   @override
   void initState() {
@@ -130,6 +132,8 @@ class _RegisterState extends State<Register> {
                               TextFormField(
                                 decoration: textInputDecoration,
                                 keyboardType: TextInputType.phone,
+                                maxLength: 11,
+                                maxLengthEnforced: false,
                                 validator: (value) =>
                                     value.isEmpty ? "Enter Phone Number" : null,
                                 onChanged: (value) {
@@ -263,87 +267,171 @@ class _RegisterState extends State<Register> {
     List users = querySnapshot.documents;
 
     if (users.length == 0) {
-      Firestore.instance.collection("Users").document(phone).setData({
-        'phone': phone,
-        'password': password,
-        'name': name,
-        'created date': DateTime.now().millisecondsSinceEpoch.toString(),
-        'address': null,
-        'point': 10,
-        'verify referral': 'false',
-        'total referred': 0,
-        'video watched': 0,
-        'product ordered': 0,
-      }).then((value) async {
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        //Write data to local....
-        await preferences.setString("phone", phone);
-        await preferences.setString("password", password);
-        setState(() {
-          isLoading = false;
-          errorMgs = "";
-        });
 
-        ///Show Alert Dialog....
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("Congratulation !",
-                    style: TextStyle(color: Colors.green),
-                    textAlign: TextAlign.center),
-                content: Container(
-                  height: 110,
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Text(
-                          "You got 10 Coin login bonus",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.deepOrange, fontWeight: FontWeight.w500),
+      FirebaseAuth _auth = FirebaseAuth.instance;
+      _auth.verifyPhoneNumber(
+          phoneNumber: "+88"+phone, //phoneWithCountryCode,
+          timeout: Duration(seconds: 120),
+          ///Automatic verify....
+          verificationCompleted: (AuthCredential credential) async {
+            Navigator.of(context).pop();
+            AuthResult result = await _auth.signInWithCredential(credential);
+            FirebaseUser user = result.user;
+            if (user != null) {
+              saveUserAndGotoNextPage(context);
+            }
+          },
+          ///If verification failed....
+          verificationFailed: (AuthException exception) async {
+            ///Show Alert Dialog....
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Incorrect phone number"),
+                    content: FlatButton(
+                      color: Colors.deepOrange,
+                      onPressed: () {
+                        setState(() {
+                          isLoading=false;
+                          errorMgs="";
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      splashColor: Colors.deepOrange[300],
+                      child: Text(
+                        "Close",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                });
+          },
+          ///Manually code sent to user....
+          codeSent: (String verificationId, [int forceResendingToken]) {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Enter Verification code"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: _codeController,
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      FlatButton(
-                        color: Colors.deepOrange,
-                        onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => Home(
-                                    userPhone: phone,
-                                  )),
-                                  (route) => false);
-                          setState(() {
-                            isLoading = false;
-                          });
-                        },
-                        splashColor: Colors.deepOrange[300],
-                        child: Text(
-                          "Close",
-                          style: TextStyle(color: Colors.white),
+                        SizedBox(height: 10,),
+                        FlatButton(
+                          onPressed: () async {
+                            final code = _codeController.text.trim();
+                            AuthCredential credential =
+                            PhoneAuthProvider.getCredential(
+                              verificationId: verificationId,
+                              smsCode: code,
+                            );
+                            AuthResult result =
+                            await _auth.signInWithCredential(credential);
+                            FirebaseUser user = result.user;
+                            if (user != null) {
+                              saveUserAndGotoNextPage(context);
+                            }
+                          },
+                          child: Text("Verify",style: TextStyle(fontSize: 16),),
+                          textColor: Colors.white,
+                          color: Colors.deepOrange,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            });
+                      ],
+                    ),
 
-      }, onError: (errorMgs) {
-        setState(() {
-          isLoading = false;
-          errorMgs = "";
-        });
-      });
+                  );
+                });
+          },
+          codeAutoRetrievalTimeout: null);
     } else {
       setState(() {
         isLoading = false;
         errorMgs = "This phone number already used";
       });
     }
+  }
+
+  Future saveUserAndGotoNextPage(BuildContext context) async{
+    Firestore.instance.collection("Users").document(phone).setData({
+      'phone': phone,
+      'password': password,
+      'name': name,
+      'created date': DateTime.now().millisecondsSinceEpoch.toString(),
+      'address': null,
+      'point': 10,
+      'verify referral': 'false',
+      'total referred': 0,
+      'video watched': 0,
+      'product ordered': 0,
+    }).then((value) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      //Write data to local....
+      await preferences.setString("phone", phone);
+      await preferences.setString("password", password);
+      setState(() {
+        isLoading = false;
+        errorMgs = "";
+      });
+      ///Show Alert Dialog....
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Congratulation !",
+                  style: TextStyle(color: Colors.green),
+                  textAlign: TextAlign.center),
+              content: Container(
+                height: 110,
+                child: Column(
+                  children: [
+                    Container(
+                      child: Text(
+                        "You got 10 Coin register bonus",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.deepOrange, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FlatButton(
+                      color: Colors.deepOrange,
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => Home(
+                                  userPhone: phone,
+                                )),
+                                (route) => false);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                      splashColor: Colors.deepOrange[300],
+                      child: Text(
+                        "Close",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+
+    }, onError: (errorMgs) {
+      setState(() {
+        isLoading = false;
+        errorMgs = "";
+      });
+    });
   }
 }

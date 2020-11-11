@@ -18,8 +18,8 @@ class AdMobService{
       return 'ca-app-pub-7461215501470288/7222512183';
     }
     if(Platform.isAndroid){
-      //return RewardedVideoAd.testAdUnitId;
-      return 'ca-app-pub-7461215501470288/9219423478';
+      return RewardedVideoAd.testAdUnitId;
+      //return 'ca-app-pub-7461215501470288/9219423478';
     }
     else{return null;}
   }
@@ -29,8 +29,8 @@ class AdMobService{
       return 'ca-app-pub-7461215501470288/4028221257';
     }
     if(Platform.isAndroid){
-      //return InterstitialAd.testAdUnitId;
-      return 'ca-app-pub-7461215501470288/3722250870';
+      return InterstitialAd.testAdUnitId;
+      //return 'ca-app-pub-7461215501470288/3722250870';
     }
     else{return null;}
   }
@@ -40,8 +40,8 @@ class AdMobService{
       return 'ca-app-pub-7461215501470288/8044639263';
     }
     if(Platform.isAndroid){
-      //return BannerAd.testAdUnitId;
-      return 'ca-app-pub-7461215501470288/1201332651';
+      return BannerAd.testAdUnitId;
+      //return 'ca-app-pub-7461215501470288/1201332651';
     }
     else{return null;}
   }
