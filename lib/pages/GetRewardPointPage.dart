@@ -52,7 +52,6 @@ class _GetRewardPointState extends State<GetRewardPoint> {
   Future getRewardPoint() async {
     final QuerySnapshot querySnapshot =
     await Firestore.instance.collection("Point per video").getDocuments();
-
     points = querySnapshot.documents;
     setState(() {
       isLoading = false;
@@ -151,10 +150,36 @@ class _GetRewardPointState extends State<GetRewardPoint> {
                         RaisedButton(
                           color: Colors.deepOrange,
                           onPressed: () {
-                            setState(() {
-                              isLoading = true;
+                            setState(() => isLoading = true);
+                            fetchUser().then((value) {
+                              if(user[0]['reward limit day'] == ""){
+                                Firestore.instance.collection('Users').document(user[0]['phone']).updateData({
+                                  'reward limit day': DateTime.now().day.toString(),
+                                });
+                                showRewardVideo();
+                              }
+                              else{
+                                if(int.parse(user[0]['reward limit day']) < DateTime.now().day){
+                                  Firestore.instance.collection('Users').document(user[0]['phone']).updateData({
+                                    'reward limit day': DateTime.now().day.toString(),
+                                    'video watched each day':0,
+                                  });
+                                  showRewardVideo();
+                                }
+                                else if(int.parse(user[0]['reward limit day']) == DateTime.now().day){
+                                  showRewardVideo();
+                                }
+                                else if(int.parse(user[0]['reward limit day']) > DateTime.now().day){
+                                  Firestore.instance.collection('Users').document(user[0]['phone']).updateData({
+                                    'reward limit day': DateTime.now().day.toString(),
+                                    'video watched each day':0,
+                                  });
+                                  showRewardVideo();
+                                }
+                              }
                             });
-                            showRewardVideo();
+
+
                           },
                           child: Text("Get My Free Coin",style: TextStyle(color: Colors.white),),
                         ),
@@ -184,41 +209,71 @@ class _GetRewardPointState extends State<GetRewardPoint> {
   }
 
   showRewardVideo() {
-    RewardedVideoAd.instance..show();
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        fetchUser();
-        dynamic rewardPoint = roundDouble((user[0]['point'] + points[0]['point']), 2);
 
-        Firestore.instance.collection("Users").document(userPhone).updateData({
-          'point': rewardPoint,
-          'video watched': (user[0]['video watched']+1),
-        }).then((value) {
-          setState(() => isLoading = false);
+    fetchUser().then((value) {
+      if(user[0]['video watched each day'] < 2){
+        RewardedVideoAd.instance..show();
+        RewardedVideoAd.instance.listener =
+            (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+          if (event == RewardedVideoAdEvent.rewarded) {
+            dynamic rewardPoint = roundDouble((user[0]['point'] + points[0]['point']), 2);
 
-          ///Show Alert Dialog....
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("You got ${points[0]['point']} points",textAlign: TextAlign.center),
-                  content: FlatButton(
-                    color: Colors.deepOrange,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    splashColor: Colors.deepOrange[300],
-                    child: Text(
-                      "Close",
-                      style: TextStyle(color: Colors.white),
-                    ),
+            Firestore.instance.collection("Users").document(userPhone).updateData({
+              'point': rewardPoint,
+              'video watched': (user[0]['video watched']+1),
+              'video watched each day': (user[0]['video watched each day']+1),
+            }).then((value) {
+              setState(() => isLoading = false);
+
+              ///Show Alert Dialog....
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("You got ${points[0]['point']} points",textAlign: TextAlign.center),
+                      content: FlatButton(
+                        color: Colors.deepOrange,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        splashColor: Colors.deepOrange[300],
+                        child: Text(
+                          "Close",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  });
+            });
+          }
+        };
+      } //if statement
+      else{
+        ///Show Alert Dialog....
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Your video limit of the day is over",textAlign: TextAlign.center),
+                content: FlatButton(
+                  color: Colors.deepOrange,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  splashColor: Colors.deepOrange[300],
+                  child: Text(
+                    "Close",
+                    style: TextStyle(color: Colors.white),
                   ),
-                );
-              });
-        });
+                ),
+              );
+            });
       }
-    };
+    });
+
   }
+
+
 }

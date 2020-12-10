@@ -321,6 +321,7 @@ class _RegisterState extends State<Register> {
                       children: [
                         TextField(
                           controller: _codeController,
+                          keyboardType: TextInputType.number,
                         ),
                         SizedBox(height: 10,),
                         FlatButton(
@@ -369,6 +370,8 @@ class _RegisterState extends State<Register> {
       'total referred': 0,
       'video watched': 0,
       'product ordered': 0,
+      'video watched each day':0,
+      'reward limit day':"",
     }).then((value) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       //Write data to local....

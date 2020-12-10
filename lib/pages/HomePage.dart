@@ -156,6 +156,7 @@ class _HomeState extends State<Home> {
       padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
       color: Colors.grey[200],
       child: GridView.builder(
+        physics: BouncingScrollPhysics(),
         itemCount: products.length,
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: size.width / 2, //200,
