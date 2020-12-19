@@ -66,64 +66,66 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     fetchProducts();
     fetchUser();
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          "GShop BD",
-          style: TextStyle(fontSize: 18),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Search(
-                            userPhone: userPhone,
-                            userPoint: users[0]['point'],
-                          )));
-            },
-            icon: Icon(
-              Icons.search_rounded,
-              color: Colors.white,
-            ),
-            splashColor: Colors.white,
-            splashRadius: 20,
-            enableFeedback: true,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            "Gshop BD",
+            style: TextStyle(fontSize: 18),
           ),
-        ],
-      ),
-      body: isLoading
-          ? dualRing()
-          : products.length == 0
-              ? noDataFoundMgs(context)
-              : mainList(context),
-      drawer: NavigationDrawer(
-        userPhone: userPhone,
-        users: users,
-      ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.shopping_cart_rounded,
-          color: Colors.white,
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Search(
+                              userPhone: userPhone,
+                              userPoint: users[0]['point'],
+                            )));
+              },
+              icon: Icon(
+                Icons.search_rounded,
+                color: Colors.white,
+              ),
+              splashColor: Colors.white,
+              splashRadius: 20,
+              enableFeedback: true,
+            ),
+          ],
         ),
-        backgroundColor: Colors.deepOrange,
-        tooltip: "Cart List",
-        splashColor: Colors.white,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CartList(
-                        userPhone: userPhone,
-                        userPoint: users[0]['point'],
-                      )));
-        },
+        body: isLoading
+            ? dualRing()
+            : products.length == 0
+                ? noDataFoundMgs(context)
+                : mainList(context),
+        drawer: NavigationDrawer(
+          userPhone: userPhone,
+          users: users,
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.shopping_cart_rounded,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.deepOrange,
+          tooltip: "Cart List",
+          splashColor: Colors.white,
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CartList(
+                          userPhone: userPhone,
+                          userPoint: users[0]['point'],
+                        )));
+          },
+        ),
       ),
     );
   }

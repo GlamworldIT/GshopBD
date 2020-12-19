@@ -18,8 +18,8 @@ class AdMobService{
     //   return 'ca-app-pub-7461215501470288/7222512183';
     // }
     if(Platform.isAndroid){
-      return RewardedVideoAd.testAdUnitId;
-      //return 'ca-app-pub-9166174712683556/8141039276';
+      //return RewardedVideoAd.testAdUnitId;
+      return 'ca-app-pub-9166174712683556/8141039276';
     }
     else{return null;}
   }
@@ -29,8 +29,8 @@ class AdMobService{
     //   return 'ca-app-pub-7461215501470288/4028221257';
     // }
     if(Platform.isAndroid){
-      return InterstitialAd.testAdUnitId;
-      //return 'ca-app-pub-9166174712683556/9478171675';
+      //return InterstitialAd.testAdUnitId;
+      return 'ca-app-pub-9166174712683556/9478171675';
     }
     else{return null;}
   }
@@ -40,8 +40,8 @@ class AdMobService{
     //   return 'ca-app-pub-7461215501470288/8044639263';
     // }
     if(Platform.isAndroid){
-      return BannerAd.testAdUnitId;
-      //return 'ca-app-pub-9166174712683556/9261731019';
+      //return BannerAd.testAdUnitId;
+      return 'ca-app-pub-9166174712683556/9261731019';
     }
     else{return null;}
   }

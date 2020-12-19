@@ -41,6 +41,17 @@ class _GetRewardPointState extends State<GetRewardPoint> {
     fetchUser();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    interstitialAd.show(
+      anchorOffset: 0.0,
+      horizontalCenterOffset: 0.0,
+      anchorType: AnchorType.bottom,
+    );
+    AdMobService.hideBannerAd();
+  }
+
   Future fetchUser() async {
     dynamic result = await DatabaseManager().getUsers(userPhone);
     setState(() {
@@ -57,17 +68,6 @@ class _GetRewardPointState extends State<GetRewardPoint> {
       isLoading = false;
     });
     AdMobService.showHomeBannerAd();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    interstitialAd.show(
-      anchorOffset: 0.0,
-      horizontalCenterOffset: 0.0,
-      anchorType: AnchorType.bottom,
-    );
-    AdMobService.hideBannerAd();
   }
 
   @override
@@ -95,6 +95,7 @@ class _GetRewardPointState extends State<GetRewardPoint> {
             child: Column(
               children: [
                 SizedBox(height: 10,),
+
                 ///Balance Container....
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50),
@@ -211,7 +212,7 @@ class _GetRewardPointState extends State<GetRewardPoint> {
   showRewardVideo() {
 
     fetchUser().then((value) {
-      if(user[0]['video watched each day'] < 2){
+      if(user[0]['video watched each day'] < 20){
         RewardedVideoAd.instance..show();
         RewardedVideoAd.instance.listener =
             (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
